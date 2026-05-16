@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AN Care Job Entry</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 10px;
+    }
+    h2 {
+      text-align: center;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: #333;
+    }
+    #status {
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
 
+<h2>AN Care Job Entry</h2>
+
+<input id="name" placeholder="Name">
+<input id="address" placeholder="Address">
+<input id="email" placeholder="Email">
+<input id="services" placeholder="Service(s)">
+<input id="price" placeholder="Price">
+<input id="date" placeholder="Date">
+<input id="time" placeholder="Time">
+<input id="paid" placeholder="Paid? Yes/No">
+<textarea id="notes" placeholder="Notes"></textarea>
+
+<button onclick="submitForm()">Submit</button>
+
+<p id="status"></p>
+
+<script>
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzvkqIzC4Rh88genD-fu4xfbT6bgbrKu8D_N8E46ZegAKcSWXpMpNBqfzMSboXeFNe2/exec";
+
+  function submitForm() {
+    const data = {
+      name: document.getElementById("name").value,
+      address: document.getElementById("address").value,
+      email: document.getElementById("email").value,
+      services: document.getElementById("services").value,
+      price: document.getElementById("price").value,
+      date: document.getElementById("date").value,
+      time: document.getElementById("time").value,
+      paid: document.getElementById("paid").value,
+      notes: document.getElementById("notes").value
+    };
+
+    fetch(WEBHOOK_URL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(text => {
+      document.getElementById("status").innerText = "✔ Added to sheet!";
+      clearForm();
+    })
+    .catch(err => {
+      document.getElementById("status").innerText = "❌ Error: " + err;
+    });
+  }
+
+  function clearForm() {
+    document.getElementById("name").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("services").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("time").value = "";
+    document.getElementById("paid").value = "";
+    document.getElementById("notes").value = "";
+  }
+</script>
+
+</body>
+</html>
